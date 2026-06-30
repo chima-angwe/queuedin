@@ -37,7 +37,7 @@ export default function PublicQueue() {
         <div>
           <button
             onClick={() => navigate("/")}
-            className="text-xs font-medium tracking-[0.15em] text-charcoal-500 uppercase mb-2 inline-block"
+            className="text-xs font-medium tracking-[0.15em] text-charcoal-500 hover:text-charcoal-300 uppercase mb-2 inline-block transition-colors cursor-pointer"
           >
             ← QueuedIn
           </button>
@@ -72,7 +72,7 @@ export default function PublicQueue() {
           <p className="text-red-400 text-sm">{error}</p>
           <button
             onClick={fetchQueue}
-            className="mt-3 text-sm text-gold-400"
+            className="mt-3 text-sm text-gold-400 font-medium hover:text-gold-300 cursor-pointer"
           >
             Retry
           </button>
@@ -86,7 +86,12 @@ export default function PublicQueue() {
           <p className="text-charcoal-500 text-sm">Walk right in — you're next!</p>
           <button
             onClick={() => navigate("/")}
-            className="mt-8 px-6 py-3 bg-gold-400 text-charcoal-950 rounded-xl text-sm font-medium active:scale-95 transition-transform"
+            className="
+              mt-8 px-6 py-3 bg-gold-400 text-charcoal-950 rounded-xl text-sm font-semibold
+              shadow-[0_3px_12px_rgba(232,204,122,0.35)]
+              hover:bg-gold-300 hover:shadow-[0_5px_18px_rgba(232,204,122,0.5)]
+              active:scale-95 transition-all duration-150 cursor-pointer
+            "
           >
             Join queue
           </button>
@@ -105,11 +110,18 @@ export default function PublicQueue() {
         </div>
       )}
 
-      {/* Join CTA */}
+      {/* Join CTA — narrower centered pill, shadow + lift so it's unmistakably a button */}
       {!loading && queue.length > 0 && (
         <button
           onClick={() => navigate("/")}
-          className="mt-6 w-full py-4 bg-gold-400 text-charcoal-950 rounded-2xl text-sm font-medium active:scale-95 transition-transform"
+          className="
+            mt-6 mx-auto px-10 py-3.5 bg-gold-400 text-charcoal-950 rounded-full text-sm font-semibold
+            flex items-center justify-center
+            shadow-[0_4px_16px_rgba(232,204,122,0.35)]
+            hover:bg-gold-300 hover:shadow-[0_6px_22px_rgba(232,204,122,0.5)] hover:-translate-y-0.5
+            active:translate-y-0 active:scale-[0.97] active:shadow-none
+            transition-all duration-150 cursor-pointer
+          "
         >
           Join queue
         </button>

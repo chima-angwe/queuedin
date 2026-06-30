@@ -80,31 +80,55 @@ export default function JoinQueue() {
         />
 
         {error && (
-          <p className="mt-3 text-sm text-red-400 animate-fade-in">{error}</p>
+          <p className="mt-3 text-sm text-red-400 animate-fade-in flex items-center gap-1.5">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="shrink-0">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            {error}
+          </p>
         )}
       </div>
 
-      {/* CTA button */}
+      {/* CTA button — narrower centered pill, shadow + icon + lift on hover + firm tap feedback */}
       <button
         onClick={handleSubmit}
         disabled={loading}
         className={`
-          mt-4 w-full py-5 rounded-2xl text-base font-medium tracking-wide
-          transition-all duration-200 active:scale-[0.98]
+          mt-6 mx-auto px-10 py-4 rounded-full text-base font-semibold tracking-wide
+          flex items-center justify-center gap-2 select-none
+          transition-all duration-150
           ${loading
             ? "bg-charcoal-700 text-charcoal-500 cursor-not-allowed"
-            : "bg-gold-400 text-charcoal-950 hover:bg-gold-300"
+            : `bg-gold-400 text-charcoal-950
+               shadow-[0_4px_16px_rgba(232,204,122,0.35)]
+               hover:bg-gold-300 hover:shadow-[0_6px_22px_rgba(232,204,122,0.5)] hover:-translate-y-0.5
+               active:translate-y-0 active:scale-[0.97] active:shadow-none
+               cursor-pointer`
           }
         `}
       >
-        {loading ? "Joining..." : "Join queue"}
+        {loading ? (
+          <>
+            <span className="w-4 h-4 rounded-full border-2 border-charcoal-500/40 border-t-charcoal-500 animate-spin" />
+            Joining...
+          </>
+        ) : (
+          <>
+            Join queue
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 12h14M13 5l7 7-7 7" />
+            </svg>
+          </>
+        )}
       </button>
 
-      {/* View full queue link */}
+      {/* View full queue link — now visually distinct from the button (underline + arrow) so it doesn't compete as a second CTA */}
       <div className="mt-8 text-center">
         <button
           onClick={() => navigate("/queue")}
-          className="text-sm text-charcoal-500 hover:text-cream transition-colors duration-200"
+          className="text-sm text-charcoal-400 hover:text-cream underline underline-offset-4 decoration-charcoal-600 hover:decoration-gold-400 transition-colors duration-200 cursor-pointer"
         >
           View live queue →
         </button>

@@ -3,6 +3,7 @@ import React from "react";
 /**
  * QueueTicket — reusable row for displaying a single ticket.
  * Used in both PublicQueue and AdminDashboard.
+ * LOGIC UNCHANGED — only markup/classes touched.
  *
  * Props:
  *   name        — string (first name for public, full name for admin)
@@ -27,7 +28,7 @@ export default function QueueTicket({
       className={`
         flex items-center gap-4 px-4 py-4 rounded-2xl transition-all duration-300
         ${isServing
-          ? "bg-charcoal-700 border border-gold-400/40"
+          ? "bg-charcoal-700 border border-gold-400/40 shadow-[0_4px_20px_-4px_rgba(232,204,122,0.15)]"
           : "bg-charcoal-800 border border-charcoal-600/50"
         }
       `}
@@ -59,20 +60,34 @@ export default function QueueTicket({
         </p>
       </div>
 
-      {/* Admin: Done button */}
+      {/* Admin: Done button — now reads as a real button: elevation + icon + hover/press feedback */}
       {isAdmin && isServing && (
         <button
           onClick={onDone}
           disabled={loading}
           className={`
-            shrink-0 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200
+            shrink-0 flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold
+            transition-all duration-150 select-none
             ${loading
               ? "bg-charcoal-600 text-charcoal-500 cursor-not-allowed"
-              : "bg-gold-400 text-charcoal-950 active:scale-95 hover:bg-gold-300"
+              : `bg-gold-400 text-charcoal-950
+                 shadow-[0_2px_8px_rgba(232,204,122,0.35)]
+                 hover:bg-gold-300 hover:shadow-[0_4px_14px_rgba(232,204,122,0.5)]
+                 active:scale-90 active:shadow-none
+                 cursor-pointer`
             }
           `}
         >
-          {loading ? "..." : "Done"}
+          {loading ? (
+            <span className="w-3.5 h-3.5 rounded-full border-2 border-charcoal-500/40 border-t-charcoal-500 animate-spin" />
+          ) : (
+            <>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              Done
+            </>
+          )}
         </button>
       )}
     </div>

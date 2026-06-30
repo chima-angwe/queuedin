@@ -46,7 +46,7 @@ function PinGate({ onSuccess }) {
           </p>
         </div>
 
-        {/* PIN input — large, thumb-friendly */}
+        {/* PIN input */}
         <input
           type="password"
           inputMode="numeric"
@@ -73,19 +73,32 @@ function PinGate({ onSuccess }) {
           </p>
         )}
 
+        {/* Primary CTA — narrower centered pill, elevation + lift-on-hover + firm press */}
         <button
           onClick={handleVerify}
           disabled={loading}
           className={`
-            mt-4 w-full py-5 rounded-2xl text-base font-medium tracking-wide
-            transition-all duration-200 active:scale-[0.98]
+            mt-4 mx-auto px-10 py-4 rounded-full text-base font-semibold tracking-wide
+            flex items-center justify-center select-none
+            transition-all duration-150
             ${loading
               ? "bg-charcoal-700 text-charcoal-500 cursor-not-allowed"
-              : "bg-gold-400 text-charcoal-950 hover:bg-gold-300"
+              : `bg-gold-400 text-charcoal-950
+                 shadow-[0_4px_16px_rgba(232,204,122,0.35)]
+                 hover:bg-gold-300 hover:shadow-[0_6px_22px_rgba(232,204,122,0.5)] hover:-translate-y-0.5
+                 active:translate-y-0 active:scale-[0.97] active:shadow-none
+                 cursor-pointer`
             }
           `}
         >
-          {loading ? "Verifying..." : "Unlock"}
+          {loading ? (
+            <span className="flex items-center justify-center gap-2">
+              <span className="w-4 h-4 rounded-full border-2 border-charcoal-500/40 border-t-charcoal-500 animate-spin" />
+              Verifying...
+            </span>
+          ) : (
+            "Unlock"
+          )}
         </button>
       </div>
     </div>
@@ -150,7 +163,7 @@ function Dashboard({ pin, onLock }) {
   return (
     <div className="min-h-screen bg-charcoal-950 flex flex-col px-6 pt-14 pb-10 animate-fade-in">
 
-      {/* Header */}
+      {/* Header — Lock now styled as a clear secondary button, not a faint chip */}
       <div className="flex items-center justify-between mb-8">
         <div>
           <p className="text-xs font-medium tracking-[0.15em] text-charcoal-500 uppercase mb-1">
@@ -161,13 +174,22 @@ function Dashboard({ pin, onLock }) {
 
         <button
           onClick={onLock}
-          className="text-xs text-charcoal-500 hover:text-cream transition-colors px-3 py-1.5 rounded-lg border border-charcoal-600/40"
+          className="
+            flex items-center gap-1.5 text-xs font-medium text-charcoal-400
+            hover:text-cream hover:bg-charcoal-800 transition-colors duration-150
+            px-3 py-2 rounded-lg border border-charcoal-600/50 cursor-pointer
+            active:scale-95
+          "
         >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
           Lock
         </button>
       </div>
 
-      {/* Stats row */}
+      {/* Stats row — kept visually flat/non-interactive on purpose (no shadow, no hover) to contrast with real buttons */}
       <div className="grid grid-cols-2 gap-3 mb-6">
         <div className="bg-charcoal-800 rounded-2xl p-4 border border-charcoal-600/30">
           <p className="text-xs text-charcoal-500 mb-1">Waiting</p>
@@ -187,30 +209,50 @@ function Dashboard({ pin, onLock }) {
 
       {/* Action error */}
       {actionError && (
-        <div className="mb-4 px-4 py-3 bg-red-950/40 border border-red-900/40 rounded-xl">
+        <div className="mb-4 px-4 py-3 bg-red-950/40 border border-red-900/40 rounded-xl flex items-center gap-2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-red-400 shrink-0">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
           <p className="text-red-400 text-sm">{actionError}</p>
         </div>
       )}
 
-      {/* Call Next button */}
+      {/* Call Next button — narrower centered pill, still highest visual weight via shadow/color since it's the core repeated action */}
       {!inProgress && (
         <button
           onClick={handleCallNext}
           disabled={actionLoading || waiting.length === 0}
           className={`
-            w-full py-5 rounded-2xl text-base font-medium tracking-wide mb-6
-            transition-all duration-200 active:scale-[0.98]
+            mx-auto px-10 py-4 rounded-full text-base font-semibold tracking-wide mb-6
+            flex items-center justify-center gap-2 select-none
+            transition-all duration-150
             ${actionLoading || waiting.length === 0
               ? "bg-charcoal-700 text-charcoal-500 cursor-not-allowed"
-              : "bg-gold-400 text-charcoal-950 hover:bg-gold-300"
+              : `bg-gold-400 text-charcoal-950
+                 shadow-[0_4px_18px_rgba(232,204,122,0.35)]
+                 hover:bg-gold-300 hover:shadow-[0_6px_24px_rgba(232,204,122,0.5)] hover:-translate-y-0.5
+                 active:translate-y-0 active:scale-[0.97] active:shadow-none
+                 cursor-pointer`
             }
           `}
         >
-          {actionLoading
-            ? "Loading..."
-            : waiting.length === 0
-            ? "Queue is empty"
-            : "Call next"}
+          {actionLoading ? (
+            <>
+              <span className="w-4 h-4 rounded-full border-2 border-charcoal-500/40 border-t-charcoal-500 animate-spin" />
+              Loading...
+            </>
+          ) : waiting.length === 0 ? (
+            "Queue is empty"
+          ) : (
+            <>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M13 5l7 7-7 7" />
+              </svg>
+              Call next
+            </>
+          )}
         </button>
       )}
 
@@ -222,7 +264,10 @@ function Dashboard({ pin, onLock }) {
       ) : error ? (
         <div className="bg-charcoal-800 rounded-2xl p-6 text-center border border-red-900/30">
           <p className="text-red-400 text-sm">{error}</p>
-          <button onClick={fetchQueue} className="mt-3 text-sm text-gold-400">
+          <button
+            onClick={fetchQueue}
+            className="mt-3 text-sm text-gold-400 font-medium hover:text-gold-300 cursor-pointer"
+          >
             Retry
           </button>
         </div>
@@ -236,7 +281,6 @@ function Dashboard({ pin, onLock }) {
         </div>
       ) : (
         <div className="flex flex-col gap-3 animate-slide-up">
-          {/* Section label */}
           {inProgress && (
             <p className="text-xs font-medium tracking-widest uppercase text-gold-400/80 px-1">
               In chair
